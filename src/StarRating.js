@@ -1,5 +1,5 @@
+import PropTypes from 'prop-types';
 import { useState } from "react";
-import PropTypes from 'prop-types'
 
 const containerStyle = {
   display: "flex",
@@ -40,13 +40,19 @@ export default function StarRating({
     fontSize: `${size / 1.5}px`,
   };
 
+  function onHandleRate(rating) {
+    setRating(rating);
+    onSetRating(rating);
+  }
+
   return (
     <div style={containerStyle} className={className}>
       <div style={starContainerStyle}>
         {Array.from({ length: maxRating }, (_, i) => (
           <Star
             key={i}
-            onRate={() => (setRating(i + 1), onSetRating(i + 1))}
+            // onRate={() => (setRating(i + 1), onSetRating(i + 1))}
+            onRate={() => onHandleRate(i + 1)}
             onHoverIn={() => setTempRating(i + 1)}
             onHoverOut={() => setTempRating(0)}
             full={tempRating ? tempRating >= i + 1 : rating >= i + 1}

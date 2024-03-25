@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const tempMovieData = [
   {
@@ -50,21 +50,54 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+const KEY = "53e5d062";
+
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [query, setQuery] = useState("");
+  const tempQuery = 'titanic'
+
+  // useEffect(function () {
+  //   fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=titanic`)
+  //     .then((res) => res.json())
+  //     .then((data) => setMovies(data.Search));
+  // }, []);
+
+  useEffect(function() {
+    async function fetchMovies() {
+      try {
+        setIsLoading(true)
+      const res = fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${tempQuery}`)
+        if(!res.ok) {
+          throw new Error("Something went wrong in fetching movie data")
+        }
+
+      const data = await (await res).json()
+      setMovies(data.Search);
+      setIsLoading(false)
+      } catch (err) {
+        console.error(err.message)
+        setError(err.message)
+      }
+    }
+    fetchMovies()
+  }, [])
+
   return (
     <>
-      <NavBar movies={movies} />
-      <Main movies={movies} />
+      <NavBar movies={movies} query={query} setQuery={setQuery}/>
+      <Main movies={movies} isLoading = {isLoading} error={error}/>
     </>
   );
 }
 
-function NavBar({ movies }) {
+function NavBar({ movies, query, setQuery }) {
   return (
     <nav className="nav-bar">
       <Logo />
-      <Search />
+      <Search query={query} setQuery={setQuery}/>
       <NumResults movies={movies} />
     </nav>
   );
@@ -79,8 +112,7 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
+function Search({query, setQuery}) {
   return (
     <input
       className="search"
@@ -100,13 +132,29 @@ function NumResults({ movies }) {
   );
 }
 
-function Main({ movies }) {
+function Main({ movies, isLoading, error }) {
   return (
     <main className="main">
-      <ListBox movies={movies} />
-      <WatchedBox />
+      {/* {isLoading ? <Loader/> : <ListBox movies={movies} /> }
+      <WatchedBox /> */}
+      {isLoading && !error && <ListBox movies={movies} /> }
+      {error && <ErrorMessage message={error}/>}
     </main>
   );
+}
+
+function Loader() {
+  return (
+    <p className="loader"> Loading...</p>
+  )
+}
+
+function ErrorMessage({message}) {
+  return (
+    <p className="error">
+      <span>❗</span> {message}
+    </p>
+  )
 }
 
 function ListBox({ movies }) {
