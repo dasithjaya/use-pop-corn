@@ -1,37 +1,34 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import './index.css';
-// import App from './App';
-import Appv2 from './Appv2';
+import App from './App';
+
 // import StarRating from "./StarRating";
-// import SeeMore from "./SeeMore";
-// import Test from "./Test";
 
 // function Test() {
-//   const[movieRating, setMovieRating] = useState(0)
+//   const [movieRating, setMovieRating] = useState(0);
 
-//   return(
+//   return (
 //     <div>
-//       <StarRating color="blue" maxRating={10} onSetRating={setMovieRating}/>
-//       <p>This film rated {movieRating}</p>
+//       <StarRating maxRating={10} color="blue" onSetRating={setMovieRating} />
+//       <p>This move is rated {movieRating} stars</p>
 //     </div>
-//   )
+//   );
 // }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <Appv2/>
-    {/* <StarRating
+    <App />
+    {/* <StarRating maxRating={3} size={24} />
+    <StarRating
       maxRating={5}
-      messages={["Terrible", "Bad", "Ok", "Good", "Amaizing"]}
+      color="red"
+      className="test"
+      messages={["Best", "Good", "Not Good", "Bad", "Worst"]}
+      defaultRating={3}
     />
-    <StarRating size={30} color="red" className="test" defaultRating={3}/>
-    <Test/> */}
-    {/* <SeeMore defaultLength={'auto'} color="blue"/>
-    <SeeMore defaultLength={1000} color="green"/>
-    <SeeMore defaultLength={400} color="red" padding={5} border={1} background="#dcdcdc" borderColor="#1c1c1c"/> */}
-    {/* <Test/> */}
+    <StarRating color="green" size={48} />
+    <Test /> */}
   </React.StrictMode>
 );
